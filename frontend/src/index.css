@@ -1,0 +1,54 @@
+@font-face{
+  font-family: Cabin;
+  src: url(./assets/fonts/Cabin-Bold.ttf)
+}
+
+@import "tailwindcss";
+
+@theme{
+  --font-Cabin: Cabin, "sans-serif";
+}
+
+
+
+@plugin "daisyui";
+
+@plugin "daisyui" {
+  themes: light --default, dark --prefersdark, black;
+}
+
+
+@plugin "daisyui/theme" {
+  name: "black";
+  default: false;
+  prefersdark: false;
+  color-scheme: "dark";
+  --color-base-100: #14161E;
+  --color-base-200: #1D1E28;
+  --color-base-300: #1D1E28;
+  --color-base-content: #A7B4C6;
+  --color-primary: oklch(64% 0.2 131.684);
+  --color-primary-content: #000000;
+  --color-secondary: oklch(35% 0 0);
+  --color-secondary-content: oklch(100% 0 0);
+  --color-accent: oklch(35% 0 0);
+  --color-accent-content: oklch(100% 0 0);
+  --color-neutral: oklch(35% 0 0);
+  --color-neutral-content: oklch(100% 0 0);
+  --color-info: oklch(26% 0 0);
+  --color-info-content: oklch(100% 0 0);
+  --color-success: oklch(51.975% 0.176 142.495);
+  --color-success-content: oklch(90.395% 0.035 142.495);
+  --color-warning: oklch(66% 0.179 58.318);
+  --color-warning-content: oklch(19.359% 0.042 109.769);
+  --color-error: oklch(62.795% 0.257 29.233);
+  --color-error-content: oklch(0% 0 0);
+  --radius-selector: 2rem;
+  --radius-field: 2rem;
+  --radius-box: 0.5rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 0;
+  --noise: 0;
+}
