@@ -13,10 +13,15 @@ const app = express();
 const PORT = process.env.PORT || 5001;
 // const __dirname = path.resolve();
 
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://to-mind.vercel.app"
+];
+
 if (process.env.NODE_ENV !== "production") {
   app.use(
     cors({
-      origin: "http://localhost:5173",
+      origin: allowedOrigins,
     })
   );
 }
