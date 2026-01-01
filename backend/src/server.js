@@ -33,6 +33,10 @@ if(process.env.NODE_ENV === "production"){
   });
 }
 
+app.get("/health", (req, res) => {
+  res.status(200).send("OK");
+});
+
 connectDB()
   .then(() => {
     app.listen(PORT, () => {
