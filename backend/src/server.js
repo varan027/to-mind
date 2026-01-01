@@ -11,9 +11,9 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5001;
-const __dirname = path.resolve();
+// const __dirname = path.resolve();
 
-if(process.env.NODE_ENV !== "production"){
+if (process.env.NODE_ENV !== "production") {
   app.use(
     cors({
       origin: "http://localhost:5173",
@@ -26,12 +26,17 @@ app.use(rateLimiter);
 
 app.use("/api/notes", notesRoutes);
 
-if(process.env.NODE_ENV === "production"){
-  app.use(express.static(path.join(__dirname,"../frontend/dist")))
-  app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "../frontend", "dist", "index.html"))
-  });
-}
+// if (process.env.NODE_ENV === "production") {
+//   app.use(express.static(path.join(__dirname, "../frontend/dist")));
+//   app.get("*", (req, res) => {
+//     res.sendFile(path.join(__dirname, "../frontend", "dist", "index.html"));
+//   });
+// }
+
+app.get("/", (req, res) => {
+  res.send("API is running 🚀");
+});
+
 
 connectDB()
   .then(() => {
@@ -42,3 +47,7 @@ connectDB()
   .catch((error) => {
     console.error("Failed to connect to the database:", error);
   });
+
+app.get("/health", (req, res) => {
+  res.status(200).send("OK");
+});
