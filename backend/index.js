@@ -24,10 +24,13 @@ if (process.env.NODE_ENV !== "production") {
       origin: allowedOrigins,
     })
   );
-}
 
 app.use(express.json());
-app.use(rateLimiter);
+// Enable rate limiting ONLY in production
+if (process.env.NODE_ENV === "production") {
+  app.use(rateLimiter);
+}
+
 
 app.use("/", notesRoutes);
 
@@ -59,4 +62,4 @@ connectDB()
 
 app.get("/health", (req, res) => {
   res.status(200).send("OK");
-});
+})};
