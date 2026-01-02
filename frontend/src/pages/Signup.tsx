@@ -2,13 +2,13 @@ import { useState } from "react";
 import { instance } from "../lib/axios";
 import { LuEye, LuEyeClosed } from "react-icons/lu";
 
-const Login = () => {
+const Signup = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(false);
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       const res = await instance.post("/auth/register", { username, email, password });
@@ -22,7 +22,7 @@ const Login = () => {
   return (
     <div className="h-screen flex justify-center items-center">
       <form
-        onSubmit={handleLogin}
+        onSubmit={handleSignup}
         className="flex flex-col justify-center items-center border border-gray-700 rounded-lg shadow-lg p-8 py-14 bg-black/50"
       >
         <h1 className="text-2xl font-semibold text-primary mb-12">Sign Up</h1>
@@ -70,4 +70,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Signup;
