@@ -1,5 +1,13 @@
 import { PlusIcon } from "lucide-react"
-import { Link } from "react-router"
+import { Link, useNavigate } from "react-router"
+import { TbLogout } from "react-icons/tb";
+
+const navigate = useNavigate();
+
+const logout = () => {
+  localStorage.removeItem("token")
+  navigate("/login", { replace: true })
+}
 
 const Navbar = () => {
   return (
@@ -9,12 +17,16 @@ const Navbar = () => {
           <h1 className="text-3xl font-bold text-primary font-Cabin tracking-tighter">
             ToMind
           </h1>
-          <div className="flex items-center">
+          <div className="flex items-center gap-2">
             <Link to={"/create"} className="btn btn-primary rounded" >
              <PlusIcon className="size-5"/>
              <span>New Note</span>
             </Link>
+            <button className="btn text-error/70 border-2 border-error/30 rounded" onClick={logout}>
+              Logout <TbLogout/>
+            </button>
           </div>
+          
         </div>
       </div>
     </div>

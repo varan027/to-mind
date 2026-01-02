@@ -7,11 +7,6 @@ import type { Note } from "../types/note";
 import { instance } from "../lib/axios";
 
 const HomePage = () => {
-  const token = localStorage.getItem("token");
-  if (!token) {
-    window.location.href = "/login";
-  }
-
   const [isRateLimit, setRateLimit] = useState(false);
   const [notes, SetNotes] = useState<Note[]>([]);
   const [loading, setLoading] = useState(true);

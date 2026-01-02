@@ -1,18 +1,21 @@
 import { useState } from "react";
 import { instance } from "../lib/axios";
 import { LuEye, LuEyeClosed } from "react-icons/lu";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(false);
 
+const navigate = useNavigate();
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       const res = await instance.post("/auth/login", { email, password });
       localStorage.setItem("token", res.data.token);
-      window.location.href = "/";
+      navigate("/", { replace: true})
     } catch (error) {
       console.log("Login error", error);
     }
