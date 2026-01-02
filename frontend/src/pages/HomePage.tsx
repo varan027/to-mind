@@ -7,6 +7,7 @@ import type { Note } from "../types/note";
 import { instance } from "../lib/axios";
 
 const HomePage = () => {
+
   const [isRateLimit, setRateLimit] = useState(false);
   const [notes, SetNotes] = useState<Note[]>([]);
   const [loading, setLoading] = useState(true);

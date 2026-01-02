@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router";
+import { Routes, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import CreatePage from "./pages/CreatePage";
 import NoteDetail from "./pages/NoteDetail";
@@ -11,15 +11,13 @@ const App = () => {
   return (
     <div data-theme="black">
       <Routes>
-        <Route path="/register" element={<Signup />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Signup />} />
 
         <Route
           path="/"
           element={
-            <ProtectedRoute>
               <HomePage />
-            </ProtectedRoute>
           }
         />
         <Route
