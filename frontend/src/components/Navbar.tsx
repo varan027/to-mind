@@ -1,5 +1,5 @@
 import { PlusIcon } from "lucide-react";
-import { Link, useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router-dom";
 import { TbLogout } from "react-icons/tb";
 
 const Navbar = () => {
