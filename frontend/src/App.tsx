@@ -4,7 +4,7 @@ import CreatePage from "./pages/CreatePage"
 import NoteDetail from "./pages/NoteDetail"
 import { Toaster } from "react-hot-toast"
 import Login from "./pages/Login"
-import Signup from "./pages/SignUp"
+import Signup from "./pages/Signup"
 
 const App = () => {
   return (
