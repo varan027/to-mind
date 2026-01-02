@@ -5,7 +5,7 @@ import path from "path";
 
 import notesRoutes from "./src/routes/notesRoutes.js";
 import { connectDB } from "./src/config/db.js";
-import rateLimiter from "./src/middleware/rateLimiter.js";
+// import rateLimiter from "./src/middleware/rateLimiter.js";
 
 dotenv.config();
 
@@ -24,13 +24,13 @@ if (process.env.NODE_ENV !== "production") {
       origin: allowedOrigins,
     })
   );
-
-app.use(express.json());
-// Enable rate limiting ONLY in production
-if (process.env.NODE_ENV === "production") {
-  app.use(rateLimiter);
 }
 
+app.use(express.json());
+// // Enable rate limiting ONLY in production
+// if (process.env.NODE_ENV === "production") {
+//   app.use(rateLimiter);
+// }
 
 app.use("/", notesRoutes);
 
@@ -40,11 +40,6 @@ app.use("/", notesRoutes);
 //     res.sendFile(path.join(__dirname, "../frontend", "dist", "index.html"));
 //   });
 // }
-
-app.get("/", (req, res) => {
-  res.send("API is running 🚀");
-});
-
 
 app.get("/health", (req, res) => {
   res.status(200).send("OK");
@@ -59,7 +54,3 @@ connectDB()
   .catch((error) => {
     console.error("Failed to connect to the database:", error);
   });
-
-app.get("/health", (req, res) => {
-  res.status(200).send("OK");
-})};
