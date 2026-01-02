@@ -1,7 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
-
+import authRoutes from "./src/routes/authRoutes.js";
 import notesRoutes from "./src/routes/notesRoutes.js";
 import { connectDB } from "./src/config/db.js";
 
@@ -24,7 +24,9 @@ if (!process.env.JWT_SECRET) {
 
 app.use(express.json());
 
+app.use("/api/auth", authRoutes);
 app.use("/api/notes", notesRoutes);
+
 
 app.get("/health", (req, res) => {
   res.status(200).send("OK");
