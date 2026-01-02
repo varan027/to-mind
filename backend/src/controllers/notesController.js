@@ -14,7 +14,14 @@ export const getAllNotes = async (_, res) => {
 
 export const getNoteById = async (req, res) => {
   try {
-    const note = await Note.findById(req.params.id);
+    const { id } = req.params;
+
+    if(!mongoose.Types.objectId.isValid(id)){
+      return res.status(400).json({message: "Invalid Note ID"});
+    }
+
+    const note = await Note.findById(id);
+    
     if (!note) return res.status(404).json({ message: "Note Not Found" });
     res.status(200).json(note);
   } catch (error) {
