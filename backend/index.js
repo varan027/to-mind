@@ -10,20 +10,16 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5001;
 
-const allowedOrigins = [
-  "http://localhost:5173",
-  "https://tomind-git-main-varan027s-projects.vercel.app/"
-];
-
   app.use(
     cors({
-      origin: allowedOrigins,
+      origin: true,
+      credentials: true,
     })
   );
 
 app.use(express.json());
 
-app.use("/api/notes", notesRoutes);
+app.use("/api", notesRoutes);
 
 app.get("/health", (req, res) => {
   res.status(200).send("OK");

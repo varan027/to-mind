@@ -16,7 +16,7 @@ const NoteDetail = () => {
   useEffect(() => {
     const fetchNote = async () => {
       try {
-        const res = await instance.get(`notes/${id}`);
+        const res = await instance.get(`/notes/${id}`);
         setTitle(res.data.title);
         setContent(res.data.content);
       } catch (error: unknown) {
