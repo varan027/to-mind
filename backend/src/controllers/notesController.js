@@ -1,4 +1,5 @@
 import Note from "../models/Note.js";
+import mongoose from "mongoose";
 
 export const getAllNotes = async (_, res) => {
   try {
@@ -16,12 +17,12 @@ export const getNoteById = async (req, res) => {
   try {
     const { id } = req.params;
 
-    if(!mongoose.Types.objectId.isValid(id)){
+    if(!mongoose.Types.ObjectId.isValid(id)){
       return res.status(400).json({message: "Invalid Note ID"});
     }
 
     const note = await Note.findById(id);
-    
+
     if (!note) return res.status(404).json({ message: "Note Not Found" });
     res.status(200).json(note);
   } catch (error) {
