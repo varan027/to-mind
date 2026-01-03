@@ -48,9 +48,9 @@ const HomePage = () => {
     <div className="min-h-screen ">
       <Navbar />
       <div className="max-w-6xl mx-auto p-4 mt-4">
-        <div className="flex justify-between">
+        <div className="md:flex justify-between">
           {user && (
-            <div className="text-right">
+            <div className=" mb-4 md:mb-0">
               <p className="text-lg">
                 Welcome,{" "} 
                 <span className="font-semibold font-mono text-primary text-3xl">
