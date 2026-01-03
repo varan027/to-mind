@@ -5,7 +5,11 @@ import { authProtect } from "../middleware/authMiddleware.js";
 const router = express.Router();
 
 router.get("/me", authProtect, (req, res) => {
-  res.json(req.user);
+  res.json({
+    id: req.user._id,
+    username: req.user.username,
+    email: req.user.email,
+  });
 });
 
 router.post("/register", register)
