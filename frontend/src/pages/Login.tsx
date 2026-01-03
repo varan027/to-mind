@@ -29,9 +29,9 @@ const Login = () => {
     <div className="h-screen flex justify-center items-center transition-all">
       <form
         onSubmit={handleLogin}
-        className="flex flex-col justify-center items-center border border-gray-700 rounded-lg shadow-lg p-8 py-14 bg-black/50"
+        className="flex flex-col justify-center items-center border border-gray-700 rounded-2xl shadow-2xl p-8 py-14 bg-black/50"
       >
-        <h1 className="text-2xl font-semibold text-primary mb-12">Login</h1>
+        <h1 className="text-4xl font-semibold text-primary mb-12">Login</h1>
         <input
           placeholder="Email"
           value={email}

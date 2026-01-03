@@ -3,7 +3,7 @@ import { instance } from "../lib/axios";
 
 type User = {
   id: string;
-  name: string;
+  username: string;
   email: string;
 };
 
@@ -12,7 +12,7 @@ type AuthContextType = {
   token: string | null;
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
-  signup: (name: string, email: string, password: string) => Promise<void>;
+  signup: (username: string, email: string, password: string) => Promise<void>;
   logout: () => void;
 };
 
@@ -25,12 +25,28 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
 
-    const storedToken = localStorage.getItem("token");
-    if (storedToken) {
-      setToken(storedToken);
-      instance.defaults.headers.Authorization = `Bearer ${storedToken}`;
-    }
-    setLoading(false);
+    const restoreUser = async () => {
+      const storedToken = localStorage.getItem("token");
+      if(!storedToken){
+        setLoading(false);
+        return;
+      }
+      try{
+        instance.defaults.headers.Authorization = `Bearer ${storedToken}`;
+
+        const res = await instance.get("/auth/me");
+        setUser(res.data);
+        setToken(storedToken);
+      } catch (error){
+        localStorage.removeItem("token");
+        setUser(null);
+        setToken(null)
+      } finally {
+        setLoading(false);
+      }
+    }   
+    
+    restoreUser();
   }, []);
 
   const login = async (email: string, password: string) => {

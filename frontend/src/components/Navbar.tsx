@@ -1,10 +1,8 @@
-import { PlusIcon } from "lucide-react";
-import { Link } from "react-router-dom";
 import { TbLogout } from "react-icons/tb";
 import { useAuth } from "../context/AuthContext";
 
 const Navbar = () => {
-  const { logout } = useAuth();
+  const { user, logout } = useAuth();
 
   return (
     <div className="bg-base-100 border-b border-base-content/10">
@@ -14,16 +12,24 @@ const Navbar = () => {
             ToMind
           </h1>
           <div className="flex items-center gap-2">
-            <Link to={"/create"} className="btn btn-primary rounded">
-              <PlusIcon className="size-5" />
-              <span>New Note</span>
-            </Link>
-            <button
-              className="btn text-error/70 border-2 border-error/30 rounded"
-              onClick={logout}
-            >
-              Logout <TbLogout />
-            </button>
+            <div>
+              {user && (
+                <div className="flex items-center gap-2">
+                  <div className="w-9 h-9 text-xl rounded-full bg-primary text-black flex items-center justify-center font-semibold">
+                      {user.username.charAt(0).toUpperCase()}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {user && (
+              <button
+                className="btn text-error/70 border-2 border-error/30 rounded"
+                onClick={logout}
+              >
+                Logout <TbLogout />
+              </button>
+            )}
           </div>
         </div>
       </div>
