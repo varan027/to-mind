@@ -54,8 +54,7 @@ const HomePage = () => {
               <p className="text-lg">
                 Welcome,{" "} 
                 <span className="font-semibold font-mono text-primary text-3xl">
-                  {user.username.charAt(0).toUpperCase()}
-                  {user.username.slice(1, 4)}
+                  {user.username}
                 </span>
               </p>
             </div>
@@ -87,7 +86,8 @@ const HomePage = () => {
           )}
 
           {!pageLoading && !isRateLimit && notes.length === 0 && (
-            <div className="text-center text-primary py-10">No Notes Found</div>
+            <div className="text-center text-primary py-10">No Notes Found
+            <br /> Create your first note!</div>
           )}
 
           {!pageLoading && !isRateLimit && notes.length > 0 && (
