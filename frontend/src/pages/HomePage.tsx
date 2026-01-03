@@ -51,12 +51,12 @@ const HomePage = () => {
         <div className="flex justify-between">
           {user && (
             <div className="text-right">
-              <p className="">
-                Welcome{" "}
-                <span className="font-semibold font-mono text-primary text-2xl">
+              <p className="text-lg">
+                Welcome,{" "} 
+                <span className="font-semibold font-mono text-primary text-3xl">
                   {user.username.charAt(0).toUpperCase()}
                   {user.username.slice(1, 4)}
-                </span>{" "}
+                </span>
               </p>
             </div>
           )}
