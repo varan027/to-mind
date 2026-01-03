@@ -4,10 +4,6 @@ import User from "../models/User.js";
 export const authProtect = async (req, res, next) => {
   let token;
 
-  if(!req.user){
-    return res.status(401).json({ message: "user not found"})
-  }
-
   if (
     req.headers.authorization &&
     req.headers.authorization.startsWith("Bearer")
