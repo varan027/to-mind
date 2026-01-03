@@ -18,6 +18,8 @@ const HomePage = () => {
 
     if(loading) return;
 
+
+
     const fetchNotes = async () => {
       try {
         const res = await instance.get("/notes");
@@ -49,15 +51,15 @@ const HomePage = () => {
       {isRateLimit && <RateLimitUI />}
 
       <div className="mx-auto p-4 mt-6 max-w-7xl">
-        {loading && (
+        {pageLoading && (
           <div className="text-center text-primary py-10">Loading Notes...</div>
         )}
 
-        {!loading && !isRateLimit && notes.length === 0 && (
+        {!pageLoading && !isRateLimit && notes.length === 0 && (
           <div className="text-center text-primary py-10">No Notes Found</div>
         )}
 
-        {!loading && !isRateLimit && notes.length > 0 && (
+        {!pageLoading && !isRateLimit && notes.length > 0 && (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-4">
             {notes.map((note: Note) => (
               <NoteCard key={note._id} note={note} />
