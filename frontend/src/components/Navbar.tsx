@@ -1,14 +1,10 @@
 import { PlusIcon } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { TbLogout } from "react-icons/tb";
+import { useAuth } from "../context/AuthContext";
 
 const Navbar = () => {
-  const navigate = useNavigate();
-
-  const logout = () => {
-    localStorage.removeItem("token");
-    navigate("/login", { replace: true });
-  };
+  const { logout } = useAuth();
 
   return (
     <div className="bg-base-100 border-b border-base-content/10">

@@ -51,6 +51,8 @@ export const register = async (req, res) => {
 }
 
 export const login = async (req, res) => {
+  console.log("LOGIN BODY:", req.body);
+
   const { email, password } = req.body;
 
   try{
@@ -58,18 +60,28 @@ export const login = async (req, res) => {
       return res.status(400).json({ message: "All fields required" });
     }
 
-    const user = await User.findOne({ email});
+    const user = await User.findOne({ email }).select("+password");
+    console.log("USER FOUND:", user);
+
     if(!user){
       return res.status(400).json({message: "Invalid Credentials"})
     }
 
+    console.log("HASHED PASSWORD:", user.password);
+
     const isMatch = await bcrypt.compare(password, user.password)
+
+    console.log("PASSWORD MATCH:", isMatch);
+
     if(!isMatch){
       return res.status(400).json({message: "Invalid Credentials"})
     }
 
+    const token = generateToken(user._id);
+    console.log("TOKEN GENERATED");
+
     res.json({
-      token: generateToken(user._id),
+      token,
       user: {
         id: user._id,
         name: user.username,
@@ -78,6 +90,6 @@ export const login = async (req, res) => {
     })
   } catch(error){
     console.log("error in login:", error);
-    res.status(500).json({message: "Server Error"});
+    res.status(500).json({message: "Server Error Login controller"});
   }
 }

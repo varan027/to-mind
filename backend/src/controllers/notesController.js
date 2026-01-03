@@ -3,13 +3,13 @@ import mongoose from "mongoose";
 
 export const getAllNotes = async (_, res) => {
   try {
-    const notes = (await Note.find()).toSorted(
-      (a, b) => b.createdAt - a.createdAt
-    );
+    const notes = await Note.find({ user: req.user._id })
+      .sort({createdAt: -1});
+
     res.status(200).json(notes);
   } catch (error) {
     console.log("error in getNotes:", error);
-    res.status(500).json({ message: "Server Error" });
+    res.status(500).json({ message: "Server Error in getAllNotes" });
   }
 };
 
@@ -21,7 +21,10 @@ export const getNoteById = async (req, res) => {
       return res.status(400).json({message: "Invalid Note ID"});
     }
 
-    const note = await Note.findById(id);
+    const note = await Note.findOne({
+      _id: id,
+      user: req.user._id
+    });
 
     if (!note) return res.status(404).json({ message: "Note Not Found" });
     res.status(200).json(note);
@@ -34,24 +37,24 @@ export const getNoteById = async (req, res) => {
 export const createNote = async (req, res) => {
   try {
     const { title, content } = req.body;
-    const newNote = new Note({ title, content });
-    await newNote.save();
-    res.status(201).json({ message: "note created" });
+    const newNote = await Note.create({
+      title,
+      content,
+      user: req.user._id
+    })
+    res.status(201).json({ message: "note created" }, newNote);
   } catch (error) {
     console.log("error n createNote:", error);
-    res.status(500).json({ message: "Server Error" });
+    res.status(500).json({ message: "Server Error in CreateNote" });
   }
 };
 
 export const updateNote = async (req, res) => {
   try {
     const { title, content } = req.body;
-    const updatedNote = await Note.findByIdAndUpdate(
-      req.params.id,
-      {
-        title,
-        content,
-      },
+    const updatedNote = await Note.findOneAndUpdate(
+      { _id: req.params.id, user: req.user._id },
+      { title, content },
       { new: true }
     );
     if (!updatedNote)
@@ -65,7 +68,11 @@ export const updateNote = async (req, res) => {
 
 export const deleteNote = async (req, res) => {
   try {
-    const deletedNote = await Note.findByIdAndDelete(req.params.id);
+    const deletedNote = await Note.findOneAndDelete(
+      {_id: req.params.id, user: req.user._id},
+      { title, content },
+      { new: true }
+    )
     if (!deletedNote)
       return res.status(404).json({ message: "Note not found" });
     res.status(200).json({ message: "Note deleted successfully" });

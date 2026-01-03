@@ -1,28 +1,32 @@
 import { useState } from "react";
-import { instance } from "../lib/axios";
 import { LuEye, LuEyeClosed } from "react-icons/lu";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import { useAuth } from "../context/AuthContext";
 
 const Login = () => {
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(false);
 
-const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await instance.post("/auth/login", { email, password });
-      localStorage.setItem("token", res.data.token);
+      await login(email, password);
       navigate("/", { replace: true})
     } catch (error) {
-      console.log("Login error", error);
+      console.error(error);
+      const err = error as any;
+      toast.error(err?.response?.data?.message || "Login failed");
     }
   };
 
   return (
-    <div className="h-screen flex justify-center items-center">
+    <div className="h-screen flex justify-center items-center transition-all">
       <form
         onSubmit={handleLogin}
         className="flex flex-col justify-center items-center border border-gray-700 rounded-lg shadow-lg p-8 py-14 bg-black/50"
@@ -56,10 +60,10 @@ const navigate = useNavigate();
             )}
           </div>
         </div>
-        <button className="border font-medium p-2 w-64 bg-primary/75 rounded text-black cursor-pointer mt-12">
+        <button className="border font-medium p-2 w-64 bg-primary/75 rounded text-black cursor-pointer mt-12 hover:bg-primary active:scale-98">
           Login
         </button>
-        <p className="text-xs mt-4">Don't have an account? <a href="/register" className="text-primary">Register</a></p>
+        <p className="text-xs mt-4">Don't have an account? <Link to="/register" className="text-primary">Register</Link></p>
       </form>
     </div>
   );
