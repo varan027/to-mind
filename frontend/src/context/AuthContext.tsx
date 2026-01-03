@@ -5,7 +5,7 @@ type User = {
   id: string;
   name: string;
   email: string;
-}
+};
 
 type AuthContextType = {
   user: User | null;
@@ -14,64 +14,74 @@ type AuthContextType = {
   login: (email: string, password: string) => Promise<void>;
   signup: (name: string, email: string, password: string) => Promise<void>;
   logout: () => void;
-}
+};
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
-const AuthProvider = ({children}: {children : React.ReactNode}) => {
+const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [ token, setToken] = useState<string | null>(null);
-  const [ loading, setLoading] = useState<boolean>(false);
+  const [token, setToken] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
 
-  useEffect(() =>{
+  useEffect(() => {
+
     const storedToken = localStorage.getItem("token");
-    if(storedToken){
+    if (storedToken) {
       setToken(storedToken);
-      instance.defaults.headers.Authorization = `Bearer ${storedToken}`
+      instance.defaults.headers.Authorization = `Bearer ${storedToken}`;
     }
-    setLoading(false)
+    setLoading(false);
   }, []);
 
   const login = async (email: string, password: string) => {
-    const res = await instance.post("/auth/login", {email, password})
+    const res = await instance.post("/auth/login", { email, password });
 
-    setToken(res.data.token);
+    const token = res.data.token;
+
+    localStorage.setItem("token", token);
+    instance.defaults.headers.Authorization = `Bearer ${token}`;
+
+    setToken(token);
     setUser(res.data.user);
-
-    localStorage.setItem("token", res.data.token);
-  }
+  };
 
   const signup = async (username: string, email: string, password: string) => {
-    const res = await instance.post("/auth/register", { username, email, password});
-
-    setToken(res.data.token);
+    const res = await instance.post("/auth/register", {
+      username,
+      email,
+      password,
+    });
+    const token = res.data.token;
+    localStorage.setItem("token", token);
+    instance.defaults.headers.Authorization = `Bearer ${token}`;
+    setToken(token);
     setUser(res.data.user);
 
     localStorage.setItem("token", res.data.token);
-  }
+  };
 
   const logout = () => {
+    localStorage.removeItem("token");
+    delete instance.defaults.headers.Authorization;
     setUser(null);
     setToken(null);
-
-    localStorage.removeItem("token");
-
-    delete instance.defaults.headers.Authorization;
-  }
+  };
 
   return (
-    <AuthContext.Provider value={{ user, token, loading, login, signup, logout}}>
+    <AuthContext.Provider
+      value={{ user, token, loading, login, signup, logout }}
+    >
       {children}
     </AuthContext.Provider>
-  )
-}
+  );
+};
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
-  if(!context){
-    throw new Error("useAuth must be used within an AuthProvider")
+  if (!context) {
+    throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
-}
+};
 
 export default AuthProvider;

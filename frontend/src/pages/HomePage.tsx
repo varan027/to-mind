@@ -5,14 +5,19 @@ import RateLimitUI from "../components/RateLimitUI";
 import toast from "react-hot-toast";
 import type { Note } from "../types/note";
 import { instance } from "../lib/axios";
+import { useAuth } from "../context/AuthContext";
 
 const HomePage = () => {
+  const { loading } = useAuth();
 
   const [isRateLimit, setRateLimit] = useState(false);
   const [notes, SetNotes] = useState<Note[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [pageLoading, setPageLoading] = useState(true);
 
   useEffect(() => {
+
+    if(loading) return;
+
     const fetchNotes = async () => {
       try {
         const res = await instance.get("/notes");
@@ -31,7 +36,7 @@ const HomePage = () => {
           else toast.error("Something went wrong. Please try again later.");
         }
       } finally {
-        setLoading(false);
+        setPageLoading(false);
       }
     };
 

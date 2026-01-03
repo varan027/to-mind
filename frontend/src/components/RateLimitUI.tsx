@@ -14,7 +14,7 @@ const RateLimitUI = () => {
           </div>
         </div>
       </div>
-     
+    
     </div>
   )
 }

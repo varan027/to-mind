@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { instance } from "../lib/axios";
 import { LuEye, LuEyeClosed } from "react-icons/lu";
 import { Link, useNavigate } from "react-router";
 import toast from "react-hot-toast";
@@ -20,7 +19,7 @@ const Signup = () => {
     try {
       await signup(username, email, password)
       toast.success("Signup successful!");
-      navigate("/", { replace: true});
+      navigate("/login", { replace: true});
 
     } catch (error) {
       console.error(error);
