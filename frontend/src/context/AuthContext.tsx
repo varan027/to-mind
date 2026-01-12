@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { instance } from "../lib/axios";
+import { AxiosError } from "axios";
 
 type User = {
   id: string;
@@ -24,34 +25,40 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-
     const restoreUser = async () => {
       const storedToken = localStorage.getItem("token");
-      if(!storedToken){
+      if (!storedToken) {
         setLoading(false);
         return;
       }
-      try{
+      try {
         instance.defaults.headers.Authorization = `Bearer ${storedToken}`;
 
         const res = await instance.get("/auth/me");
         setUser(res.data);
         setToken(storedToken);
-      } catch (error){
-        localStorage.removeItem("token");
-        setUser(null);
-        setToken(null)
+      } catch (error: unknown) {
+        console.error("Auth verification failed", error);
+
+        if (error instanceof AxiosError && error.response?.status === 429) {
+          console.warn("Rate limited during auth check - preserving session");
+          setToken(storedToken);
+        } else {
+          localStorage.removeItem("token");
+          setUser(null);
+          setToken(null);
+          delete instance.defaults.headers.Authorization;
+        }
       } finally {
         setLoading(false);
       }
-    }   
-    
+    };
+
     restoreUser();
   }, []);
 
   const login = async (email: string, password: string) => {
     const res = await instance.post("/auth/login", { email, password });
-
     const token = res.data.token;
 
     localStorage.setItem("token", token);
@@ -68,12 +75,12 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       password,
     });
     const token = res.data.token;
+
     localStorage.setItem("token", token);
     instance.defaults.headers.Authorization = `Bearer ${token}`;
+
     setToken(token);
     setUser(res.data.user);
-
-    localStorage.setItem("token", res.data.token);
   };
 
   const logout = () => {
