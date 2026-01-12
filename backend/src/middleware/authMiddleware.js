@@ -12,16 +12,13 @@ export const authProtect = async (req, res, next) => {
   }
 
   if (!token) {
-    console.log("❌ No token received");
     return res.status(401).json({ message: "Not authorized, no token" });
   }
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    console.log("✅ Token decoded:", decoded);
 
     const user = await User.findById(decoded.userId).select("-password");
-    console.log("👤 User from DB:", user);
 
     if (!user) {
       console.log("❌ User not found in DB");

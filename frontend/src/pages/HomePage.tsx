@@ -47,10 +47,8 @@ const HomePage = () => {
       <Navbar />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Header Section */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-12 animate-fade-in">
           <div>
-            {/* FIXED: Text colors now use base-content */}
             <h1 className="text-4xl font-bold text-base-content tracking-tight mb-1">
               My Mind
             </h1>
@@ -71,7 +69,6 @@ const HomePage = () => {
 
         {isRateLimit && <RateLimitUI />}
 
-        {/* Loading State */}
         {pageLoading && (
           <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-4 space-y-4">
             {[...Array(8)].map((_, i) => (
