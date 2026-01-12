@@ -8,6 +8,7 @@ import { instance } from "../lib/axios";
 import { useAuth } from "../context/AuthContext";
 import { Link } from "react-router-dom";
 import { PlusIcon, CloudCog } from "lucide-react";
+import { AxiosError } from "axios";
 
 const HomePage = () => {
   const { user, loading } = useAuth();
@@ -22,11 +23,17 @@ const HomePage = () => {
       setRateLimit(false);
     } catch (error: unknown) {
       console.log("error fetching Notes", error);
-      if (error instanceof Error) {
-        if (error.message.includes("429")) setRateLimit(true);
-        else if (error.message.includes("Failed to fetch"))
-          toast.error("Couldn't connect to the server.");
-        else toast.error("Something went wrong.");
+      
+      if (error instanceof AxiosError) {
+        if (error.response?.status === 429) {
+          setRateLimit(true);
+        } else if (error.message.includes("Network Error")) {
+          toast.error("Network Error. Check your connection.");
+        } else {
+          toast.error("Failed to load notes.");
+        }
+      } else {
+        toast.error("An unexpected error occurred.");
       }
     } finally {
       setPageLoading(false);
@@ -84,7 +91,6 @@ const HomePage = () => {
           </div>
         )}
 
-        {/* Empty State */}
         {!pageLoading && !isRateLimit && notes.length === 0 && (
           <div className="flex flex-col items-center justify-center h-[40vh] text-center border-2 border-dashed border-base-content/10 rounded-3xl animate-fade-in bg-base-200/20">
             <div className="bg-base-200 p-4 rounded-full mb-4 shadow-xl">
@@ -99,7 +105,6 @@ const HomePage = () => {
           </div>
         )}
 
-        {/* Masonry Layout */}
         {!pageLoading && !isRateLimit && notes.length > 0 && (
           <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-4 space-y-4">
             {notes.map((note: Note) => (

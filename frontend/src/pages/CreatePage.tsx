@@ -9,7 +9,7 @@ const CreatePage = () => {
   const [content, setContent] = useState("");
   const [saving, setSaving] = useState(false);
   const navigate = useNavigate();
-  
+
   const titleRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
@@ -40,36 +40,48 @@ const CreatePage = () => {
   return (
     <div className="min-h-screen bg-base-100 flex flex-col transition-colors duration-300">
       <div className="px-6 py-6 flex justify-between items-center max-w-5xl mx-auto w-full border-b border-base-content/5">
-        <Link to="/" className="text-base-content/60 hover:text-base-content transition-colors flex items-center gap-2 group">
-           <ArrowLeft size={20} className="group-hover:-translate-x-1 transition-transform" /> 
-           <span className="hidden sm:inline">Back</span>
-        </Link>
-        
-        <button 
-            onClick={handleSave} 
-            disabled={saving}
-            className="btn btn-primary btn-sm h-10 px-6 rounded-full font-medium text-primary-content"
+        <Link
+          to="/"
+          className="text-base-content/60 hover:text-base-content transition-colors flex items-center gap-2 group"
         >
-            {saving ? <Loader2 className="animate-spin size-4" /> : <><Save size={16} className="mr-1"/> Save Note</>}
+          <ArrowLeft
+            size={20}
+            className="group-hover:-translate-x-1 transition-transform"
+          />
+          <span className="hidden sm:inline">Back</span>
+        </Link>
+
+        <button
+          onClick={handleSave}
+          disabled={saving}
+          className="btn btn-primary btn-sm h-10 px-6 rounded-full font-medium text-primary-content"
+        >
+          {saving ? (
+            <Loader2 className="animate-spin size-4" />
+          ) : (
+            <>
+              <Save size={16} className="mr-1" /> Save Note
+            </>
+          )}
         </button>
       </div>
 
       <div className="flex-1 max-w-4xl mx-auto w-full px-6 mt-12 animate-fade-in flex flex-col">
         <textarea
-            ref={titleRef}
-            placeholder="Untitled Note"
-            rows={1}
-            className="w-full bg-transparent text-4xl md:text-5xl font-bold text-base-content placeholder-base-content/20 border-none focus:outline-none focus:ring-0 p-0 mb-8 font-Cabin tracking-tight resize-none overflow-hidden"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            autoFocus
+          ref={titleRef}
+          placeholder="Untitled Note"
+          rows={1}
+          className="w-full bg-transparent text-4xl md:text-5xl font-bold text-base-content placeholder-base-content/20 border-none focus:outline-none focus:ring-0 p-0 mb-8 font-Cabin tracking-tight resize-none overflow-hidden"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          autoFocus
         />
         <textarea
-            placeholder="Start typing your thoughts..."
-            className="flex-1 w-full bg-transparent text-lg text-base-content/80 placeholder-base-content/30 border-none focus:outline-none focus:ring-0 resize-none p-0 leading-relaxed"
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-            disabled={saving}
+          placeholder="Start typing your thoughts..."
+          className="flex-1 w-full bg-transparent text-lg text-base-content/80 placeholder-base-content/30 border-none focus:outline-none focus:ring-0 resize-none p-0 leading-relaxed"
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
+          disabled={saving}
         ></textarea>
       </div>
     </div>

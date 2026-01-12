@@ -32,8 +32,7 @@ const Login = () => {
   return (
     <div className="min-h-screen bg-mesh flex justify-center items-center p-4 transition-all duration-300">
       <div className="glass-panel w-full max-w-md p-8 rounded-2xl animate-slide-up relative overflow-hidden">
-        
-        {/* Decorator blob */}
+
         <div className="absolute top-0 right-0 -mt-8 -mr-8 w-32 h-32 bg-primary/20 blur-3xl rounded-full"></div>
 
         <div className="text-center mb-8">
