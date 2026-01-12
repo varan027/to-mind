@@ -11,12 +11,8 @@ const generateToken = (userId) => {
 };
 
 export const register = async (req, res) => {
-
-  console.log(req.body);
-
   const { username, email, password } = req.body;
   try{
-
     if (!username || !email || !password) {
       return res.status(400).json({ message: "All fields required" });
     }
@@ -34,25 +30,21 @@ export const register = async (req, res) => {
       password: hashedPassword
     });
 
-    res.status(201).json(
-      {
+    res.status(201).json({
       token: generateToken(newUser._id),
       user: {
         id: newUser._id,
         name: newUser.username,
         email: newUser.email
       }
-    }
-    );
+    });
   } catch (error) {
-    console.log("error in register:", error);
+    console.log("Error in register:", error.message);
     res.status(500).json({message: "Server Error"});
   }
 }
 
 export const login = async (req, res) => {
-  console.log("LOGIN BODY:", req.body);
-
   const { email, password } = req.body;
 
   try{
@@ -61,24 +53,18 @@ export const login = async (req, res) => {
     }
 
     const user = await User.findOne({ email }).select("+password");
-    console.log("USER FOUND:", user);
 
     if(!user){
       return res.status(400).json({message: "Invalid Credentials"})
     }
 
-    console.log("HASHED PASSWORD:", user.password);
-
     const isMatch = await bcrypt.compare(password, user.password)
-
-    console.log("PASSWORD MATCH:", isMatch);
 
     if(!isMatch){
       return res.status(400).json({message: "Invalid Credentials"})
     }
 
     const token = generateToken(user._id);
-    console.log("TOKEN GENERATED");
 
     res.json({
       token,
@@ -89,7 +75,7 @@ export const login = async (req, res) => {
       }
     })
   } catch(error){
-    console.log("error in login:", error);
-    res.status(500).json({message: "Server Error Login controller"});
+    console.log("Error in login:", error.message);
+    res.status(500).json({message: "Server Error"});
   }
 }

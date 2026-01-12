@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { ArrowLeft, Save, Trash2, Loader2 } from "lucide-react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
@@ -11,6 +11,16 @@ const NoteDetail = () => {
   const [saving, setSaving] = useState(false);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  
+  const titleRef = useRef<HTMLTextAreaElement>(null);
+
+  // Auto-resize title when data loads or changes
+  useEffect(() => {
+    if (titleRef.current) {
+      titleRef.current.style.height = "auto";
+      titleRef.current.style.height = titleRef.current.scrollHeight + "px";
+    }
+  }, [title, loading]);
 
   useEffect(() => {
     const fetchNote = async () => {
@@ -61,7 +71,6 @@ const NoteDetail = () => {
   }
 
   return (
-    // FIXED: Changed bg-[#14161E] to bg-base-100
     <div className="min-h-screen bg-base-100 flex flex-col transition-colors duration-300">
       {/* Minimal Toolbar */}
       <div className="px-6 py-6 flex justify-between items-center max-w-5xl mx-auto w-full border-b border-base-content/5">
@@ -89,11 +98,12 @@ const NoteDetail = () => {
 
       {/* Editor Area */}
       <div className="flex-1 max-w-4xl mx-auto w-full px-6 mt-12 animate-fade-in flex flex-col">
-        {/* FIXED: Inputs now use base-content */}
-        <input
-            type="text"
+        {/* FIXED: Changed to Textarea */}
+        <textarea
+            ref={titleRef}
             placeholder="Untitled Note"
-            className="w-full bg-transparent text-4xl md:text-5xl font-bold text-base-content placeholder-base-content/20 border-none focus:outline-none focus:ring-0 p-0 mb-8 font-Cabin tracking-tight"
+            rows={1}
+            className="w-full bg-transparent text-4xl md:text-5xl font-bold text-base-content placeholder-base-content/20 border-none focus:outline-none focus:ring-0 p-0 mb-8 font-Cabin tracking-tight resize-none overflow-hidden"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
         />

@@ -1,7 +1,7 @@
 import { ArrowLeft, Save, Loader2 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { instance } from "../lib/axios";
 
 const CreatePage = () => {
@@ -9,6 +9,17 @@ const CreatePage = () => {
   const [content, setContent] = useState("");
   const [saving, setSaving] = useState(false);
   const navigate = useNavigate();
+  
+  // Ref for auto-resizing the title
+  const titleRef = useRef<HTMLTextAreaElement>(null);
+
+  // Auto-resize title height on change
+  useEffect(() => {
+    if (titleRef.current) {
+      titleRef.current.style.height = "auto";
+      titleRef.current.style.height = titleRef.current.scrollHeight + "px";
+    }
+  }, [title]);
 
   const handleSave = async () => {
     if (!title.trim() && !content.trim()) {
@@ -29,7 +40,6 @@ const CreatePage = () => {
   };
 
   return (
-    // FIXED: Changed bg-[#14161E] to bg-base-100 for proper Light Mode
     <div className="min-h-screen bg-base-100 flex flex-col transition-colors duration-300">
       {/* Minimal Toolbar */}
       <div className="px-6 py-6 flex justify-between items-center max-w-5xl mx-auto w-full border-b border-base-content/5">
@@ -49,11 +59,12 @@ const CreatePage = () => {
 
       {/* Editor Area */}
       <div className="flex-1 max-w-4xl mx-auto w-full px-6 mt-12 animate-fade-in flex flex-col">
-        {/* FIXED: Input colors use base-content */}
-        <input
-            type="text"
+        {/* FIXED: Changed from Input to Textarea for wrapping */}
+        <textarea
+            ref={titleRef}
             placeholder="Untitled Note"
-            className="w-full bg-transparent text-4xl md:text-5xl font-bold text-base-content placeholder-base-content/20 border-none focus:outline-none focus:ring-0 p-0 mb-8 font-Cabin tracking-tight"
+            rows={1}
+            className="w-full bg-transparent text-4xl md:text-5xl font-bold text-base-content placeholder-base-content/20 border-none focus:outline-none focus:ring-0 p-0 mb-8 font-Cabin tracking-tight resize-none overflow-hidden"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             autoFocus
