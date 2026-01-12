@@ -6,10 +6,16 @@ import { Toaster } from "react-hot-toast";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import ProtectedRoute from "./components/ProtectedRoute";
+import { useEffect } from "react";
 
 const App = () => {
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme") || "black";
+    document.documentElement.setAttribute("data-theme", savedTheme);
+  }, []);
+
   return (
-    // Removed hardcoded data-theme="black" so ThemeToggle works
     <div>
       <Routes>
         <Route path="/login" element={<Login />} />
