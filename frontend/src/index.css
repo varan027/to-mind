@@ -8,9 +8,9 @@
 @theme {
   --font-Cabin: Cabin, "sans-serif";
   
-  /* Custom Animations */
-  --animate-fade-in: fadeIn 0.3s ease-out forwards;
-  --animate-slide-up: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --animate-fade-in: fadeIn 0.4s ease-out forwards;
+  --animate-slide-up: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --animate-pulse-slow: pulseSlow 3s infinite;
 
   @keyframes fadeIn {
     from { opacity: 0; }
@@ -21,60 +21,83 @@
     from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
   }
+
+  @keyframes pulseSlow {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.8; }
+  }
 }
 
 @plugin "daisyui";
 
 @plugin "daisyui" {
-  themes: light --default, dark --prefersdark, black;
+  themes: black, light;
 }
 
+/* --- DARK THEME (Deep Obsidian) --- */
 @plugin "daisyui/theme" {
   name: "black";
-  default: false;
-  prefersdark: false;
+  default: true;
+  prefersdark: true;
   color-scheme: "dark";
-  --color-base-100: #14161E;
-  --color-base-200: #1D1E28;
-  --color-base-300: #1D1E28;
-  --color-base-content: #A7B4C6;
-  --color-primary: oklch(64% 0.2 131.684);
-  --color-primary-content: #000000;
-  --color-secondary: oklch(35% 0 0);
-  --color-secondary-content: oklch(100% 0 0);
-  --color-accent: oklch(35% 0 0);
-  --color-accent-content: oklch(100% 0 0);
-  --color-neutral: oklch(35% 0 0);
-  --color-neutral-content: oklch(100% 0 0);
-  --color-info: oklch(26% 0 0);
-  --color-info-content: oklch(100% 0 0);
-  --color-success: oklch(51.975% 0.176 142.495);
-  --color-success-content: oklch(90.395% 0.035 142.495);
-  --color-warning: oklch(66% 0.179 58.318);
-  --color-warning-content: oklch(19.359% 0.042 109.769);
-  --color-error: oklch(62.795% 0.257 29.233);
-  --color-error-content: oklch(0% 0 0);
+  --color-base-100: #050505; 
+  --color-base-200: #0F0F0F;
+  --color-base-300: #1A1A1A;
+  --color-base-content: #E4E4E7;
+  --color-primary: oklch(65% 0.24 280);
+  --color-primary-content: #FFFFFF;
+  --color-secondary: oklch(85% 0.1 280);
+  --color-accent: oklch(70% 0.19 320);
+  --color-error: oklch(65% 0.24 25);
   --radius-selector: 2rem;
-  --radius-field: 2rem;
-  --radius-box: 0.5rem;
-  --size-selector: 0.25rem;
-  --size-field: 0.25rem;
+  --radius-field: 0.8rem;
+  --radius-box: 1rem;
   --border: 1px;
-  --depth: 0;
-  --noise: 0;
 }
 
-/* Custom Utilities for Glassmorphism */
+/* --- LIGHT THEME (Soft Paper) --- */
+@plugin "daisyui/theme" {
+  name: "light";
+  default: false;
+  prefersdark: false;
+  color-scheme: "light";
+  /* UPDATED: Softer Off-White instead of blinding pure white */
+  --color-base-100: #FAF9F6; 
+  
+  /* UPDATED: Slightly deeper gray for cards to stand out */
+  --color-base-200: #E4E4E7; 
+  
+  --color-base-300: #D4D4D8;
+  --color-base-content: #18181B; 
+  --color-primary: oklch(55% 0.25 280); 
+  --color-primary-content: #FFFFFF;
+  --color-secondary: oklch(60% 0.1 280);
+  --color-accent: oklch(55% 0.2 320);
+  --color-error: oklch(60% 0.2 25);
+  --radius-selector: 2rem;
+  --radius-field: 0.8rem;
+  --radius-box: 1rem;
+  --border: 1px;
+}
+
 @layer utilities {
   .glass-panel {
-    @apply bg-base-200/60 backdrop-blur-md border border-white/5 shadow-xl;
+    @apply bg-base-200/40 backdrop-blur-xl border border-base-content/5 shadow-2xl;
   }
   
   .glass-card {
-    @apply bg-base-200/40 backdrop-blur-sm border border-white/5 transition-all duration-300;
+    /* Adaptive glass */
+    @apply bg-base-200/50 backdrop-blur-md border border-base-content/5 transition-all duration-300;
   }
   
   .glass-card:hover {
-    @apply bg-base-200/60 border-primary/20 shadow-lg shadow-primary/5 -translate-y-1;
+    @apply bg-base-200/80 border-primary/30 shadow-lg shadow-primary/10 -translate-y-1;
+  }
+  
+  .bg-mesh {
+    background-color: var(--color-base-100);
+    background-image: 
+      radial-gradient(at 0% 0%, color-mix(in oklab, var(--color-primary), transparent 90%) 0px, transparent 50%),
+      radial-gradient(at 100% 0%, color-mix(in oklab, var(--color-secondary), transparent 90%) 0px, transparent 50%);
   }
 }

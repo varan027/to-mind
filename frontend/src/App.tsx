@@ -9,7 +9,8 @@ import ProtectedRoute from "./components/ProtectedRoute";
 
 const App = () => {
   return (
-    <div data-theme="black">
+    // Removed hardcoded data-theme="black" so ThemeToggle works
+    <div>
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Signup />} />
@@ -39,7 +40,15 @@ const App = () => {
           }
         />
       </Routes>
-      <Toaster />
+      <Toaster 
+        toastOptions={{
+          style: {
+            background: 'var(--color-base-200)',
+            color: 'var(--color-base-content)',
+            border: '1px solid rgba(255,255,255,0.1)',
+          },
+        }}
+      />
     </div>
   );
 };
