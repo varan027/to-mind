@@ -4,6 +4,7 @@ import cors from "cors";
 import authRoutes from "./src/routes/authRoutes.js";
 import notesRoutes from "./src/routes/notesRoutes.js";
 import { connectDB } from "./src/config/db.js";
+import rateLimiter from "./src/middleware/rateLimiter.js";
 
 dotenv.config();
 
@@ -23,6 +24,8 @@ if (!process.env.JWT_SECRET) {
   );
 
 app.use(express.json());
+
+app.use(rateLimiter);
 
 app.use("/api/auth", authRoutes);
 app.use("/api/notes", notesRoutes);
