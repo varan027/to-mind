@@ -5,6 +5,16 @@
 
 @import "tailwindcss";
 
+/* --- 1. GLOBAL SETTINGS (Source of Truth) --- */
+:root {
+  --color-brand-primary: oklch(76% 0.19 65);
+  --color-brand-primary-text: #101010;
+  --color-brand-secondary: oklch(85% 0.1 85); 
+  
+  --color-brand-accent: oklch(70% 0.19 320);
+  --color-brand-error: oklch(65% 0.24 25);
+}
+
 @theme {
   --font-Cabin: Cabin, "sans-serif";
   
@@ -34,46 +44,53 @@
   themes: black, light;
 }
 
-/* --- DARK THEME (Deep Obsidian) --- */
+/* --- 2. DARK THEME (Deep Obsidian) --- */
 @plugin "daisyui/theme" {
   name: "black";
   default: true;
   prefersdark: true;
   color-scheme: "dark";
+  
+  /* Backgrounds */
   --color-base-100: #050505; 
   --color-base-200: #0F0F0F;
   --color-base-300: #1A1A1A;
   --color-base-content: #E4E4E7;
-  --color-primary: oklch(65% 0.24 280);
-  --color-primary-content: #FFFFFF;
-  --color-secondary: oklch(85% 0.1 280);
-  --color-accent: oklch(70% 0.19 320);
-  --color-error: oklch(65% 0.24 25);
+
+  /* Brand Colors */
+  --color-primary: var(--color-brand-primary);
+  --color-primary-content: var(--color-brand-primary-text);
+  
+  --color-secondary: var(--color-brand-secondary);
+  --color-accent: var(--color-brand-accent);
+  --color-error: var(--color-brand-error);
+  
   --radius-selector: 2rem;
   --radius-field: 0.8rem;
   --radius-box: 1rem;
   --border: 1px;
 }
 
-/* --- LIGHT THEME (Soft Paper) --- */
+/* --- 3. LIGHT THEME (Soft Paper) --- */
 @plugin "daisyui/theme" {
   name: "light";
   default: false;
   prefersdark: false;
   color-scheme: "light";
-  /* UPDATED: Softer Off-White instead of blinding pure white */
+  
   --color-base-100: #FAF9F6; 
+  --color-base-200: #FFFFFF; 
+  --color-base-300: #F2F0E9; 
   
-  /* UPDATED: Slightly deeper gray for cards to stand out */
-  --color-base-200: #E4E4E7; 
-  
-  --color-base-300: #D4D4D8;
   --color-base-content: #18181B; 
-  --color-primary: oklch(55% 0.25 280); 
-  --color-primary-content: #FFFFFF;
-  --color-secondary: oklch(60% 0.1 280);
-  --color-accent: oklch(55% 0.2 320);
-  --color-error: oklch(60% 0.2 25);
+
+  --color-primary: var(--color-brand-primary);
+  --color-primary-content: var(--color-brand-primary-text);
+  
+  --color-secondary: var(--color-brand-secondary);
+  --color-accent: var(--color-brand-accent);
+  --color-error: var(--color-brand-error);
+  
   --radius-selector: 2rem;
   --radius-field: 0.8rem;
   --radius-box: 1rem;
@@ -82,16 +99,15 @@
 
 @layer utilities {
   .glass-panel {
-    @apply bg-base-200/40 backdrop-blur-xl border border-base-content/5 shadow-2xl;
+    @apply bg-base-200/60 backdrop-blur-xl border border-base-content/5 shadow-2xl;
   }
   
   .glass-card {
-    /* Adaptive glass */
-    @apply bg-base-200/50 backdrop-blur-md border border-base-content/5 transition-all duration-300;
+    @apply bg-base-200/70 backdrop-blur-md border border-base-content/15 transition-all duration-300;
   }
   
   .glass-card:hover {
-    @apply bg-base-200/80 border-primary/30 shadow-lg shadow-primary/10 -translate-y-1;
+    @apply bg-base-200/90 border-primary/30 shadow-lg shadow-primary/10 -translate-y-1;
   }
   
   .bg-mesh {
@@ -103,24 +119,20 @@
 }
 
 @layer base {
-  /* Scrollbar Track */
   ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
   }
 
-  /* Track Background */
   ::-webkit-scrollbar-track {
     background: var(--color-base-100); 
   }
 
-  /* Handle (The moving part) */
   ::-webkit-scrollbar-thumb {
     background: var(--color-base-300);
     border-radius: 4px;
   }
 
-  /* Handle on Hover */
   ::-webkit-scrollbar-thumb:hover {
     background: var(--color-primary); 
   }

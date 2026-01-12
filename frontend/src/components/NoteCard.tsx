@@ -54,7 +54,6 @@ const NoteCard = ({ note, onDelete }: NoteCardProps) => {
 
           <div>
             <div className="flex justify-between items-start mb-2">
-              {/* FIXED: added line-clamp-2 to prevent title from taking up entire card */}
               <h2 className="card-title text-lg font-bold text-base-content leading-tight mb-1 w-[90%] break-words line-clamp-2">
                 {note.title}
               </h2>
@@ -65,7 +64,7 @@ const NoteCard = ({ note, onDelete }: NoteCardProps) => {
             </p>
           </div>
 
-          <div className="flex justify-between items-end border-t border-base-content/5 pt-3 mt-4">
+          <div className="flex justify-between items-end border-t border-base-content/10 pt-3 mt-4">
             <span className="text-xs text-primary font-mono tracking-wider">
               {formatDate(note.createdAt)}
             </span>
