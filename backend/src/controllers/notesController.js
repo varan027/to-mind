@@ -3,7 +3,9 @@ import mongoose from "mongoose";
 
 export const getAllNotes = async (req, res) => {
   try {
-    const notes = await Note.find({ user: req.user._id }).sort({ createdAt: -1 });
+    const notes = await Note.find({ user: req.user._id }).sort({
+      createdAt: -1,
+    });
     res.status(200).json(notes);
   } catch (error) {
     console.error("Error in getAllNotes:", error);
@@ -29,11 +31,15 @@ export const getNoteById = async (req, res) => {
 
 export const createNote = async (req, res) => {
   try {
-    const title = typeof req.body.title === "string" ? req.body.title.trim() : "";
-    const content = typeof req.body.content === "string" ? req.body.content : "";
+    const title =
+      typeof req.body.title === "string" ? req.body.title.trim() : "";
+    const content =
+      typeof req.body.content === "string" ? req.body.content.trim() : "";
 
-    if (!title && !content.trim()) {
-      return res.status(400).json({ message: "Please add a title or content" });
+    if (!content) {
+      return res.status(400).json({
+        message: "Note content is required",
+      });
     }
 
     const newNote = await Note.create({
@@ -52,20 +58,22 @@ export const createNote = async (req, res) => {
 export const updateNote = async (req, res) => {
   try {
     const { id } = req.params;
-    const title = typeof req.body.title === "string" ? req.body.title.trim() : "";
-    const content = typeof req.body.content === "string" ? req.body.content : "";
+    const title =
+      typeof req.body.title === "string" ? req.body.title.trim() : "";
+    const content =
+      typeof req.body.content === "string" ? req.body.content : "";
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return res.status(400).json({ message: "Invalid Note ID" });
     }
-    if (!title && !content.trim()) {
-      return res.status(400).json({ message: "Please add a title or content" });
+    if (!content.trim()) {
+      return res.status(400).json({ message: "Note content is required" });
     }
 
     const updatedNote = await Note.findOneAndUpdate(
       { _id: id, user: req.user._id },
       { title: title || "Untitled Note", content },
-      { new: true, runValidators: true }
+      { new: true, runValidators: true },
     );
 
     if (!updatedNote) {
@@ -86,7 +94,10 @@ export const deleteNote = async (req, res) => {
       return res.status(400).json({ message: "Invalid Note ID" });
     }
 
-    const deletedNote = await Note.findOneAndDelete({ _id: id, user: req.user._id });
+    const deletedNote = await Note.findOneAndDelete({
+      _id: id,
+      user: req.user._id,
+    });
     if (!deletedNote) {
       return res.status(404).json({ message: "Note not found" });
     }

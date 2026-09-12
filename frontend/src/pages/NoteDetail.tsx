@@ -47,8 +47,8 @@ const NoteDetail = () => {
 
   const handleSave = async () => {
     if (!id) return;
-    if (!title.trim() && !content.trim()) {
-      toast.error("Please add a title or content");
+    if (!content.trim()) {
+      toast.error("Note content is required");
       return;
     }
 

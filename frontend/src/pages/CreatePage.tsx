@@ -19,8 +19,8 @@ const CreatePage = () => {
   }, [title]);
 
   const handleSave = async () => {
-    if (!title.trim() && !content.trim()) {
-      toast.error("Please add a title or content");
+    if (!content.trim()) {
+      toast.error("Note content is required");
       return;
     }
 
