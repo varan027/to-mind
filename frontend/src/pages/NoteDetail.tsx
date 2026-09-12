@@ -17,49 +17,81 @@ const NoteDetail = () => {
   useEffect(() => {
     if (titleRef.current) {
       titleRef.current.style.height = "auto";
-      titleRef.current.style.height = titleRef.current.scrollHeight + "px";
+      titleRef.current.style.height = `${titleRef.current.scrollHeight}px`;
     }
   }, [title, loading]);
 
   useEffect(() => {
     const fetchNote = async () => {
+      if (!id) {
+        toast.error("Invalid note");
+        navigate("/", { replace: true });
+        return;
+      }
+
       try {
         const res = await instance.get(`/notes/${id}`);
-        setTitle(res.data.title);
-        setContent(res.data.content);
-      } catch (error: unknown) {
-        console.log("error fetching Note", error);
+        setTitle(res.data.title ?? "");
+        setContent(res.data.content ?? "");
+      } catch (error) {
+        console.error("Error fetching note", error);
         toast.error("Could not load note");
-        navigate("/");
+        navigate("/", { replace: true });
       } finally {
         setLoading(false);
       }
     };
+
     fetchNote();
   }, [id, navigate]);
 
   const handleSave = async () => {
-    if (!title.trim() && !content.trim()) return;
+    if (!id) return;
+    if (!title.trim() && !content.trim()) {
+      toast.error("Please add a title or content");
+      return;
+    }
+
     setSaving(true);
     try {
-      await instance.put(`notes/${id}`, { title, content });
+      await instance.put(`/notes/${id}`, {
+        title: title.trim(),
+        content,
+      });
       toast.success("Note updated");
       navigate("/");
-    } catch (error) {
-      toast.error("Failed to update note");
+    } catch (error: unknown) {
+      console.error("Error updating note", error);
+      const message =
+        typeof error === "object" &&
+        error !== null &&
+        "response" in error &&
+        typeof error.response === "object" &&
+        error.response !== null &&
+        "data" in error.response &&
+        typeof error.response.data === "object" &&
+        error.response.data !== null &&
+        "message" in error.response.data
+          ? String(error.response.data.message)
+          : "Failed to update note";
+      toast.error(message);
     } finally {
       setSaving(false);
     }
   };
 
   const handleDelete = async () => {
-    if (!window.confirm("Are you sure you want to delete this note?")) return;
+    if (!id || !window.confirm("Are you sure you want to delete this note?")) {
+      return;
+    }
+
     try {
       await instance.delete(`/notes/${id}`);
       toast.success("Note deleted");
-      navigate("/");
+      navigate("/", { replace: true });
     } catch (error) {
-      toast.error("Failed to delete");
+      console.error("Error deleting note", error);
+      toast.error("Failed to delete note");
     }
   };
 
@@ -122,7 +154,8 @@ const NoteDetail = () => {
           className="flex-1 w-full bg-transparent text-lg text-base-content/80 placeholder-base-content/30 border-none focus:outline-none focus:ring-0 resize-none p-0 leading-relaxed"
           value={content}
           onChange={(e) => setContent(e.target.value)}
-        ></textarea>
+          disabled={saving}
+        />
       </div>
     </div>
   );
