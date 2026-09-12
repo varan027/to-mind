@@ -21,7 +21,7 @@ const Signup = () => {
     try {
       await signup(username, email, password);
       toast.success("Account created!");
-      navigate("/login", { replace: true });
+      navigate("/", { replace: true });
     } catch (error) {
       console.error(error);
       const err = error as any;
