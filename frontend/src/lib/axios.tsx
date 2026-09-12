@@ -1,7 +1,9 @@
 import axios from "axios";
 
+const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:5001/api";
+
 export const instance = axios.create({
-  baseURL: "https://tomind.onrender.com/api",
+  baseURL: apiUrl,
   headers: {
     "Content-Type": "application/json",
   },
