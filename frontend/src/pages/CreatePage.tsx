@@ -9,13 +9,12 @@ const CreatePage = () => {
   const [content, setContent] = useState("");
   const [saving, setSaving] = useState(false);
   const navigate = useNavigate();
-
   const titleRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     if (titleRef.current) {
       titleRef.current.style.height = "auto";
-      titleRef.current.style.height = titleRef.current.scrollHeight + "px";
+      titleRef.current.style.height = `${titleRef.current.scrollHeight}px`;
     }
   }, [title]);
 
@@ -24,14 +23,30 @@ const CreatePage = () => {
       toast.error("Please add a title or content");
       return;
     }
+
     setSaving(true);
     try {
-      await instance.post("/notes", { title, content });
+      await instance.post("/notes", {
+        title: title.trim(),
+        content,
+      });
       toast.success("Note saved successfully");
-      navigate("/");
-    } catch (error) {
-      console.error(error);
-      toast.error("Error saving note");
+      navigate("/", { replace: true });
+    } catch (error: unknown) {
+      console.error("Error saving note", error);
+      const responseMessage =
+        typeof error === "object" &&
+        error !== null &&
+        "response" in error &&
+        typeof error.response === "object" &&
+        error.response !== null &&
+        "data" in error.response &&
+        typeof error.response.data === "object" &&
+        error.response.data !== null &&
+        "message" in error.response.data
+          ? String(error.response.data.message)
+          : null;
+      toast.error(responseMessage || "Error saving note");
     } finally {
       setSaving(false);
     }
@@ -82,7 +97,7 @@ const CreatePage = () => {
           value={content}
           onChange={(e) => setContent(e.target.value)}
           disabled={saving}
-        ></textarea>
+        />
       </div>
     </div>
   );
