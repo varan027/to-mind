@@ -40,7 +40,7 @@ export const register = async (req, res) => {
       token: generateToken(newUser._id),
       user: {
         id: newUser._id,
-        name: newUser.username,
+        username: newUser.username,
         email: newUser.email
       }
     });
@@ -76,7 +76,7 @@ export const login = async (req, res) => {
       token,
       user: {
         id: user._id,
-        name: user.username,
+        username: user.username,
         email: user.email
       }
     })
